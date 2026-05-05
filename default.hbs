@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="{{@site.locale}}">
+<head>
+
+    {{!-- Basic meta - advanced meta is output with {{ghost_head}} below --}}
+    <title>{{meta_title page=(t " (Page %)")}}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {{!-- ☀️🌙 Check local storage for theme preference --}}
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    </script>
+    
+    {{!-- Preload main styles and scripts for better performance --}}
+    <link rel="preload" as="style" href="{{asset "built/screen.css"}}">
+    <link rel="preload" as="script" href="{{asset "built/source.js"}}">
+    
+    {{!-- Preload local fonts to avoid layout shift and preserve user privacy --}}
+    <link rel="preload" as="font" type="font/woff2" href="{{asset "fonts/inter-roman.woff2"}}" crossorigin="anonymous">
+    
+    <link rel="preload" as="font" type="font/woff2" href="{{asset "fonts/cardo-v21-latin_latin-ext-regular.woff2"}}" crossorigin="anonymous">
+    <link rel="preload" as="font" type="font/woff2" href="{{asset "fonts/cardo-v21-latin_latin-ext-700.woff2"}}" crossorigin="anonymous">
+    <link rel="preload" as="font" type="font/woff2" href="{{asset "fonts/cardo-v21-latin_latin-ext-italic.woff2"}}" crossorigin="anonymous">
+    
+    <link rel="preload" as="font" type="font/woff2" href="{{asset "fonts/jetbrains-mono-roman.woff2"}}" crossorigin="anonymous">
+    <link rel="preload" as="font" type="font/woff2" href="{{asset "fonts/jetbrains-mono-italic.woff2"}}" crossorigin="anonymous">
+
+    <style>
+        /* Inter - Body */
+        @font-face {
+            font-family: "Inter";
+            font-style: normal;
+            font-weight: 100 900;
+            font-display: swap;
+            src: url({{asset "fonts/inter-roman.woff2"}}) format("woff2");
+        }
+        @font-face {
+            font-family: "Inter";
+            font-style: normal;
+            font-weight: 100 900;
+            font-display: swap;
+            src: url({{asset "fonts/inter-roman.woff2"}}) format("woff2");
+        }
+
+        /* Cardo - Headings */
+        @font-face {
+            font-family: "Cardo";
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+            src: url({{asset "fonts/cardo-v21-latin_latin-ext-regular.woff2"}}) format("woff2");
+        }
+        @font-face {
+            font-family: "Cardo";
+            font-style: italic;
+            font-weight: 400;
+            font-display: swap;
+            src: url({{asset "fonts/cardo-v21-latin_latin-ext-italic.woff2"}}) format("woff2");
+        }
+        @font-face {
+            font-family: "Cardo";
+            font-style: normal;
+            font-weight: 700;
+            font-display: swap;
+            src: url({{asset "fonts/cardo-v21-latin_latin-ext-700.woff2"}}) format("woff2");
+        }
+
+        /* JetBrains Mono - Code Snippets */
+        @font-face {
+            font-family: "JetBrains Mono";
+            font-style: normal;
+            font-weight: 100 800;
+            font-display: swap;
+            src: url({{asset "fonts/jetbrains-mono-roman.woff2"}}) format("woff2");
+        }
+        @font-face {
+            font-family: "JetBrains Mono";
+            font-style: italic;
+            font-weight: 100 800;
+            font-display: swap;
+            src: url({{asset "fonts/jetbrains-mono-italic.woff2"}}) format("woff2");
+        }
+    </style>
+
+    {{!-- Theme assets - use the {{asset}} helper to reference styles & scripts, this will take care of caching and cache-busting automatically --}}
+    <link rel="stylesheet" type="text/css" href="{{asset "built/screen.css"}}">
+
+    {{!-- This tag outputs all your advanced SEO meta, structured data, and other important settings, it should always be the last tag before the closing head tag --}}
+    {{ghost_head}}
+
+</head>
+<body class="{{body_class}} has-serif-title has-sans-body">
+
+<div class="gh-viewport">
+    
+    {{> "components/navigation" navigationLayout=@custom.navigation_layout}}
+
+    {{{body}}}
+    
+    {{> "components/footer"}}
+    
+</div>
+
+{{#is "post, page"}}
+    {{> "lightbox"}}
+{{/is}}
+
+{{!-- Scripts - handle responsive videos, infinite scroll, and navigation dropdowns --}}
+<script src="{{asset "built/source.js"}}"></script>
+
+{{!-- Ghost outputs required functional scripts with this tag, it should always be the last thing before the closing body tag --}}
+{{ghost_foot}}
+
+{{!-- ☀️🌙 Load theme toggles --}}
+<script>
+    const toggleButtons = document.querySelectorAll('.theme-toggle');
+    const sunIcons = document.querySelectorAll('.sun-icon');
+    const moonIcons = document.querySelectorAll('.moon-icon');
+
+    function updateIcons(theme) {
+        if (theme === 'dark') {
+            sunIcons.forEach(icon => icon.style.display = 'block');
+            moonIcons.forEach(icon => icon.style.display = 'none');
+        } else {
+            sunIcons.forEach(icon => icon.style.display = 'none');
+            moonIcons.forEach(icon => icon.style.display = 'block');
+        }
+    }
+
+    // Match icons with the initial load state
+    updateIcons(document.documentElement.getAttribute('data-theme'));
+
+    // Toggle logic on click for all buttons
+    toggleButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            let currentTheme = document.documentElement.getAttribute('data-theme');
+            let newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateIcons(newTheme);
+
+            // Coerce Ghost comments parent app to force color recalculation
+            const commentsContainer = document.getElementById('ghost-comments-root');
+            if (commentsContainer && commentsContainer.parentNode) {
+                commentsContainer.parentNode.classList.toggle('theme-toggled');
+            }
+        });
+    });
+</script>
+
+{{{block "scripts"}}}
+
+</body>
+</html>

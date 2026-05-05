@@ -1,0 +1,35 @@
+{{!< default}}
+{{!-- The tag above means: insert everything in this file into the body of the default.hbs template --}}
+
+<section class="p-outer">
+    <div class="p-inner p-hero">
+        <div class="p-hero-right">
+        <div>
+            <h1>Welcome to {{@site.title}}!</h1>
+            <p>We're democratizing intelligence to build a more resilient society and put the community back into intelligence.</p>
+            <p>We translate intelligence tradecraft into accessible training and technical services that secure data, mitigate geopolitical risks, and build long-term digital resilience for the public.</p>
+            <p>Learn more about our <a href="{{@site.url}}/training">training</a> and <a href="{{@site.url}}/services">services</a> or <a href="{{@site.url}}/#/portal/signup">subscribe</a> to our monthly intel brief.</p>
+        </div>
+        <div class="p-hero-buttons">
+            {{! Launches the Ghost membership portal }}
+            <button data-portal="signup">Subscribe</button>
+            {{! Link to an about page }}
+            <a href="/about/">Learn more &rarr;</a>
+        </div>
+        </div>
+        <div class="p-hero-left">
+          {{! Loads the cover image defined in Ghost admin }}
+          <img src="{{img_url @site.cover_image size="l"}}" alt="{{@site.title}} Publication Cover" />
+        </div>
+    </div>
+</section>
+
+{{> "components/header" headerStyle=@custom.header_style}}
+
+{{#match @custom.header_style "!=" "Highlight"}}
+    {{> "components/featured" showFeatured=@custom.show_featured_posts limit=4}}
+{{/match}}
+
+{{> "components/cta"}}
+
+{{> "components/post-list" feed="home" postFeedStyle=@custom.post_feed_style showTitle=true showSidebar=@custom.show_publication_info_sidebar}}

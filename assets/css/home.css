@@ -1,0 +1,152 @@
+/* --- UNIVERSAL FORM OVERRIDE --- */
+.gh-form {
+  background-color: var(--rw-linen) !important;
+  border: 1px solid var(--rw-ash) !important;
+}
+.gh-form-input {
+  color: var(--rw-jet) !important;
+}
+.gh-form-input::placeholder {
+  color: var(--rw-raven) !important;
+}
+
+/* --- HERO COMPONENT --- */
+.p-outer {
+  padding: 4vmin max(4vmin, 20px) 0;
+}
+.p-outer:first-of-type {
+  background-color: var(--background-color);
+}
+.p-inner {
+  max-width: 1200px;
+  margin-inline: auto;
+}
+.p-hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3.2vmin;
+  align-items: center;
+}
+.p-hero-left {
+  order: 1;
+}
+.p-hero-left img {
+  width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+}
+.p-hero-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  order: 2;
+}
+.p-hero h1 {
+  text-transform: uppercase;
+  margin-bottom: 1.6rem;
+  font-size: clamp(2.4rem, 3vw, 3.2rem); 
+}
+.p-hero p {
+  font-size: clamp(1.8rem, 2.5vw, 2.4rem); 
+  line-height: 1.35;
+}
+.p-hero p + p {
+  margin-top: 1.6rem;
+}
+
+/* --- HERO LINKS & BUTTONS --- */
+.home-template .p-hero p a {
+  color: var(--ghost-accent-color);
+  text-decoration: underline; 
+  text-underline-offset: 4px; /* Safe to leave as px for thin decorative lines */
+  transition: opacity 0.2s ease;
+}
+.home-template .p-hero p a:hover {
+  opacity: 0.8;
+}
+.p-hero-buttons {
+  display: flex;
+  gap: 1.6rem;
+  margin-block-start: 2.4rem;
+}
+.p-hero-buttons button,
+.p-hero-buttons a {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5em 1em; /* Converted 8px 16px to em so button shape scales with font */
+  font-size: 1.6rem; /* Already relative */
+  font-weight: 700;
+  color: var(--rw-linen);
+  letter-spacing: -0.005em;
+  background-color: var(--ghost-accent-color);
+  border: 3px solid var(--ghost-accent-color);
+  border-radius: 6px; /* Safe to leave as px for shape geometry */
+  cursor: pointer;
+}
+/* Adaptive Secondary Button */
+.home-template .p-hero-buttons a {
+  color: var(--ghost-accent-color);
+  background-color: transparent;
+  transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .home-template .p-hero-buttons a {
+  color: var(--rw-linen);
+}
+
+.home-template .p-hero-buttons a:hover {
+  color: var(--rw-linen);
+  background-color: var(--ghost-accent-color);
+}
+/* Primary Button Hover */
+.home-template .p-hero-buttons button {
+  transition: opacity 0.2s ease; 
+}
+.home-template .p-hero-buttons button:hover {
+  opacity: 0.85; 
+}
+
+/* --- RESPONSIVE LAYOUT --- */
+@media (min-width: 768px) {
+  .p-hero { grid-template-columns: 2fr 3fr; }
+  .p-hero-left img {
+    max-height: none;
+    aspect-ratio: 1 / 1; 
+    object-fit: contain; 
+    object-position: center; 
+  }
+}
+@media (max-width: 767px) {
+  #theme-toggle-desktop { 
+    display: none !important; 
+  }
+  .p-hero h1 {
+    font-size: clamp(1.8rem, 5.5vw, 2.4rem); 
+    margin-bottom: 1.0rem;
+    letter-spacing: -0.02em; 
+  }
+  .p-hero p {
+    font-size: 1.6rem;
+    line-height: 1.4;
+  }
+  .p-hero p + p {
+    margin-top: 1.0rem;
+  }
+  .p-hero-left img {
+    max-height: 180px;
+    margin-bottom: 1.6rem;
+  }
+  .p-hero-buttons {
+    margin-block-start: 1.8rem;
+  }
+}
+@media (min-width: 768px) {
+  #theme-toggle-mobile { display: none !important; }
+}
+
+/* --- DARK MODE LOGO INVERSIONS --- */
+[data-theme="dark"] .gh-navigation-logo img,
+[data-theme="dark"] .gh-footer-logo img,
+[data-theme="dark"] .p-hero-left img {
+  filter: invert(1);
+}

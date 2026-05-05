@@ -1,0 +1,147 @@
+<header id="gh-navigation" class="gh-navigation is-{{#match navigationLayout "Logo on the left"}}left-logo{{else match navigationLayout "Stacked"}}stacked{{else}}middle-logo{{/match}}{{#match @custom.header_and_footer_color "Accent color"}} has-accent-color{{/match}} gh-outer">
+    <div class="gh-navigation-inner gh-inner">
+
+        <div class="gh-navigation-brand">
+            <a class="gh-navigation-logo is-title" href="{{@site.url}}">
+                {{#if @site.logo}}
+                    <img src="{{@site.logo}}" alt="{{@site.title}}">
+                {{else}}
+                    {{@site.title}}
+                {{/if}}
+            </a>
+            
+            {{!-- WRAPPED SEARCH AND THEME TOGGLE FOR MOBILE --}}
+            <div class="gh-nav-actions-wrapper">
+                {{> "search-toggle"}}
+                <button class="gh-icon-button theme-toggle" id="theme-toggle-mobile" aria-label="Toggle Dark Mode" title="Toggle Dark Mode">
+                    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                </button>
+            </div>
+
+            <button class="gh-burger gh-icon-button" aria-label="{{t "Menu"}}">
+                {{> "icons/burger"}}
+                {{> "icons/close"}}
+            </button>
+        </div>
+
+        <nav class="gh-navigation-menu">
+            {{!-- INJECT CUSTOM DROPDOWN --}}
+            {{#if @site.navigation}}
+                <ul class="nav">
+                    {{#foreach @site.navigation}}
+                        {{#match label "Resources"}}
+                            <li class="nav-resources has-dropdown">
+                                <div class="dropdown-header">
+                                    <a href="/resources/">{{label}}</a>
+                                    <button class="dropdown-toggle" aria-expanded="false" aria-label="Toggle Dropdown">
+                                        <svg style="pointer-events: none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                    </button>
+                                </div>
+                                <ul class="resources-dropdown">
+                                    {{#get "pages" filter="featured:true" limit="6" order="updated_at desc, title asc" as |featured_resources|}}
+                                        {{#if featured_resources}}
+                                            {{#foreach featured_resources}}
+                                                <li><a href="{{url}}">{{title}}</a></li>
+                                            {{/foreach}}
+                                            <li><hr style="margin: 8px 0; border: 0; border-top: 1px solid var(--color-border);"></li>
+                                        {{/if}}
+                                    {{/get}}
+                                    <li><a href="/resources/">View All Resources</a></li>
+                                </ul>
+                            </li>
+                        {{else}}
+                            <li class="nav-{{slug}}{{#if current}} nav-current{{/if}}"><a href="{{this.url}}">{{label}}</a></li>
+                        {{/match}}
+                    {{/foreach}}
+                </ul>
+            {{/if}}
+            {{!-- END CUSTOM DROPDOWN --}}
+
+            {{#unless @site.members_enabled}}
+                {{#match navigationLayout "Stacked"}}
+                    {{> "search-toggle"}}
+                {{/match}}
+            {{/unless}}
+        </nav>
+
+        <div class="gh-navigation-actions">
+            {{!-- WRAPPED SEARCH AND THEME TOGGLE FOR DESKTOP --}}
+            <div class="gh-nav-actions-wrapper">
+                {{#unless @site.members_enabled}}
+                    {{^match navigationLayout "Stacked"}}
+                        {{> "search-toggle"}}
+                    {{/match}}
+                {{else}}
+                    {{> "search-toggle"}}
+                {{/unless}}
+                
+                <button class="gh-icon-button theme-toggle" id="theme-toggle-desktop" aria-label="Toggle Dark Mode" title="Toggle Dark Mode">
+                    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                </button>
+            </div>
+
+            {{!-- MEMBERSHIP BUTTONS --}}
+            {{#if @site.members_enabled}}
+                <div class="gh-navigation-members">
+                    {{#unless @member}}
+                        {{#unless @site.members_invite_only}}
+                            <a href="#/portal/signin" data-portal="signin">{{t "Sign in"}}</a>
+                            {{#unless hideSubscribeButton}}
+                                <a class="gh-button" href="#/portal/signup" data-portal="signup">{{t "Subscribe"}}</a>
+                            {{/unless}}
+                        {{else}}
+                            <a class="gh-button" href="#/portal/signin" data-portal="signin">{{t "Sign in"}}</a>
+                        {{/unless}}
+                    {{else}}
+                        <a class="gh-button" href="#/portal/account" data-portal="account">{{t "Account"}}</a>
+                    {{/unless}}
+                </div>
+            {{/if}}
+        </div>
+
+    </div>
+</header>
+{{#contentFor "scripts"}}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('click', function(e) {
+            const target = e.target instanceof Element ? e.target : e.target.parentElement;
+            if (!target || typeof target.closest !== 'function') return;
+
+            const toggleBtn = target.closest('.dropdown-toggle');
+            if (toggleBtn) {
+                e.preventDefault(); 
+                e.stopPropagation();
+                const dropdownParent = toggleBtn.closest('.has-dropdown');
+                if (dropdownParent) {
+                    const isExpanded = dropdownParent.classList.toggle('is-expanded');
+                    toggleBtn.setAttribute('aria-expanded', isExpanded);
+                }
+            } else {
+                // Close menu if tapping anywhere else on the screen
+                document.querySelectorAll('.has-dropdown.is-expanded').forEach(function(dropdown) {
+                    if (!dropdown.contains(target)) {
+                        dropdown.classList.remove('is-expanded');
+                        const btn = dropdown.querySelector('.dropdown-toggle');
+                        if (btn) btn.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            }
+        });
+
+        // Reset when the mobile hamburger is clicked
+        const burgerBtn = document.querySelector('.gh-burger');
+        if (burgerBtn) {
+            burgerBtn.addEventListener('click', function() {
+                document.querySelectorAll('.has-dropdown.is-expanded').forEach(function(dropdown) {
+                    dropdown.classList.remove('is-expanded');
+                    const btn = dropdown.querySelector('.dropdown-toggle');
+                    if (btn) btn.setAttribute('aria-expanded', 'false');
+                });
+            });
+        }
+    });
+</script>
+{{/contentFor}}
