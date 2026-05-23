@@ -1,7 +1,7 @@
 {
     "name": "ravenwood-theme",
     "description": "A bespoke, Ghost theme for Ravenwood Intelligence Cooperative, hard-forked from the official Source theme.",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "engines": {
         "ghost": ">=5.0.0",
         "node": ">=22.12.0"
@@ -56,7 +56,7 @@
         "gulp-uglify": "3.0.2",
         "gulp-zip": "6.1.0",
         "inquirer": "13.2.2",
-        "postcss": "8.5.6",
+        "postcss": "8.5.10",
         "postcss-easy-import": "4.0.0",
         "pump": "3.0.3"
     },

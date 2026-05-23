@@ -31,24 +31,70 @@ One neat trick is that you can also create custom one-off templates by adding th
 
 # Development
 
-Source styles are compiled using Gulp/PostCSS to polyfill future CSS spec. You'll need [Node](https://nodejs.org/), [Yarn](https://yarnpkg.com/) and [Gulp](https://gulpjs.com) installed globally. After that, from the theme's root directory:
+To get started with a local development server, we recommend [nvm](https://github.com/nvm-sh/nvm). With nvm installed setup the Ghost-CLI and local server.
 
 ```bash
-# install dependencies
-yarn install
+# set the correct node version for ghost
+nvm use 22
 
-# run development server
-yarn dev
+# install the Ghost-CLI
+npm install ghost-cli@latest -g
+
+# install the ghost server
+ghost install local
+
+# start ghost
+ghost start
+
+# stop ghost
+ghost stop
+
+# view logs
+ghost log
+
+# list running servers
+ghost ls
 ```
 
-Now you can edit `/assets/css/` files, which will be compiled to `/assets/built/` automatically.
+Configure the theme in a separate project folder outside of the ghost server directory.
 
-The `zip` Gulp task packages the theme files into `dist/<theme-name>.zip`, which you can then upload to your site.
+```bash
+# clone this repo in a new folder outside of your local server
+git clone https://github.com/RavenwoodIntel/ravenwood-theme.git
+
+# (optional) hard fork the source theme and start from scratch
+npx degit https://github.com/tryghost/starter super-sick-ghost-theme
+
+# navigate to your custom theme's root and install dependencies
+npm install
+
+# run development server
+npm run dev
+
+# link theme to local Ghost server from server's /content/themes/
+ln -s path/to/your/ravenwood-theme .
+```
+
+Now you can edit `/assets/css/` files, which will be compiled to `/assets/built/` automatically. The `zip` Gulp task packages the theme files into `dist/<theme-name>.zip`.
 
 ```bash
 # create .zip file
-yarn zip
+npm run zip
 ```
+
+Before committing, it's strongly recommended to run the gscan tool to check for errors, deprecations, and compatability issues.
+
+```bash
+# Install the npm package
+npm install -g gscan
+
+# Use gscan <file path> anywhere to run gscan against a folder
+gscan /path/to/ghost/content/themes/casper
+
+# Run gscan on a zip file in the standard location from project root
+gscan -z dist/ravenwood-theme.zip
+```
+
 
 # PostCSS Features Used
 
